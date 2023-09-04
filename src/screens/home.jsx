@@ -2,20 +2,15 @@ import { useEffect, useState } from "react"
 import {View} from "react-native"
 import {Text, Button} from "react-native-paper"
 import { Alert } from "react-native"
-import { auth } from "../config/firebase";
+import { auth, uploadToFirebase } from "../config/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import * as ImagePicker from 'expo-image-picker';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { Image } from "react-native";
+import Feed from "../utils/feed";
 
 
 export default function HomeScreen({navigation}){
     
     const [logado, setLogado] = useState("Deslogado")
-    const [file, setFile] = useState(null)	
-    const [enviando, setEnviando] = useState(false)
-
-    const storage = getStorage();
 
     const pickImage = async () => {
 
@@ -26,33 +21,18 @@ export default function HomeScreen({navigation}){
         const result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.All,
           allowsEditing: true,
-          aspect: [4, 3],
+          quality: 1,
         });
         if (!result.canceled) {
-          setFile(result.assets[0].uri);
+            const { uri } = result.assets[0];
+            const fileName = uri.split('/').pop();
+            const fileType = fileName.split('.').pop();
+            await uploadToFirebase(uri, fileType);
+            alert ('Imagem enviada com sucesso!')
         } else if (result.canceled) {
-            Alert.alert('Você não selecionou uma imagem');
-        } else {
-            Alert.alert('Erro ao selecionar a imagem');
-        }
-    }
-
-    const uploadImage = async () => {
-        if (file == null) {
             alert('Você não selecionou uma imagem');
         } else {
-            const { uri } = file;
-            const filename = uri.substring();
-            const imageRef = ref(storage, `images/${filename}`);
-
-            uploadBytes(imageRef, file).then ((snapshot) => 
-            {
-                alert('Imagem postada com sucesso!');
-                setFile(null);
-            }).catch((error) => {
-                alert('Erro ao postar a imagem');
-            }
-            );
+            alert('Erro ao selecionar a imagem');
         }
     }
 
@@ -79,17 +59,14 @@ export default function HomeScreen({navigation}){
             <Button onPress={()=> {navigation.navigate("login")}}>Login</Button>
             <Button onPress={()=> {navigation.navigate("register")}}>Registrar</Button>
 
-            <Text style={{textAlign:'center', fontWeight:'bold'}}>Estado: {logado}</Text>   
+            <Text style={{textAlign:'center', fontWeight:'bold',}}>Estado: {logado}</Text>   
         </View>
     )
     else return (
         <View>
             <Text style={{textAlign:'center'}}>Twittelopes</Text>
-            <Button onPress={pickImage}>Selecione uma imagem!</Button>
-            {file !== null ? (
-                <Image source={{ uri: file.uri }} style={{width:200, height: 200}}/>
-            ) : null}
-            <Button onPress={uploadImage}>Postar</Button>
+            <Button onPress={pickImage}>Envie uma imagem!</Button>
+            <Feed />
             <Text style={{textAlign:'center', fontWeight:'bold'}}>Estado: {logado}</Text>
             <Button onPress={logout}>Sair</Button>
         </View>

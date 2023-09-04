@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -18,8 +20,14 @@ const firebaseConfig = {
 
 };
 
+const uploadToFirebase = async (uri, name) => {
+  const fetchResponse = await fetch(uri);
+  const theBlob = await fetchResponse.blob();
 
+  const imageRef = ref(getStorage(), `images/${name}`);
+  const uploadTask = (uploadBytes(imageRef, theBlob));
+}
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-export { app, auth };
+export { app, auth, uploadToFirebase };
