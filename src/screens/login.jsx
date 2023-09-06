@@ -34,6 +34,7 @@ export default function Login({navigation}) {
                 value={email}
                 onChangeText={setEmail}
                 mode = "outlined"
+                style={{margin: 10}}
             />
             <TextInput
                 label="Senha"
@@ -42,8 +43,9 @@ export default function Login({navigation}) {
                 onChangeText={setPassword}
                 mode = "outlined"
                 secureTextEntry = {true}
+                style={{margin: 10}}
             />
-            <Button onPress={handleLogin}>Login</Button>
+            <Button onPress={handleLogin} mode="contained" style={{margin:20}}>Login</Button>
         </View>
     )
 }

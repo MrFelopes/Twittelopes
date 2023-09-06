@@ -20,10 +20,10 @@ export default function Feed(){
     
     return( 
 
-        <View>
+        <View style ={{alignItems:'center'}}>
             {imagesUrl.map((url) => (
                 <Image
-                    style={{ width: 200, height: 200 }}
+                    style={{ width: 200, height: 200, margin: 10, borderWidth: 3, borderColor: 'black', borderRadius: 10 }}
                     source={{
                     uri: url,
                     }}

@@ -6,6 +6,7 @@ import { auth, uploadToFirebase } from "../config/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import * as ImagePicker from 'expo-image-picker';
 import Feed from "../utils/feed";
+import { ScrollView } from "react-native-web";
 
 
 export default function HomeScreen({navigation}){
@@ -63,14 +64,15 @@ export default function HomeScreen({navigation}){
         </View>
     )
     else return (
-        <View>
-            <Text style={{textAlign:'center'}}>Twittelopes</Text>
-            <Button onPress={pickImage}>Envie uma imagem!</Button>
-            <Feed />
-            <Text style={{textAlign:'center', fontWeight:'bold'}}>Estado: {logado}</Text>
-            <Button onPress={logout}>Sair</Button>
-        </View>
-    
+        <ScrollView>
+            <View>
+                <Text style={{textAlign:'center', paddingTop:20, fontSize:25, fontWeight:"bold"}}>Twittelopes</Text>
+                <Button onPress={pickImage} mode="contained" style={{margin:20}}>Envie uma imagem!</Button>
+                <Feed />
+                <Text style={{textAlign:'center', fontWeight:'bold', padding:10}}>Estado: {logado}</Text>
+                <Button onPress={logout} mode="contained" style={{margin:20}}>Sair</Button>
+            </View>
+        </ScrollView>
     )
 }
 

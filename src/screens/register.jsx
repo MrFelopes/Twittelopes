@@ -37,6 +37,7 @@ export default function Register() {
                     value={email}
                     onChangeText={setEmail}
                     mode = "outlined"
+                    style={{margin: 10}}
                 />
 
                 <TextInput 
@@ -46,8 +47,9 @@ export default function Register() {
                     onChangeText={setPassword}
                     mode = "outlined"
                     secureTextEntry = {true}
+                    style={{margin: 10}}
                 />
-                <Button onPress={handleRegister}>Registrar</Button>
+                <Button onPress={handleRegister} mode="contained" style={{margin:20}}>Registrar</Button>
             </View>
         </View>
     );
